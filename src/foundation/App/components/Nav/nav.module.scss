@@ -1,0 +1,82 @@
+.AppHeader {
+  background-color: #282c34;
+  font-size: calc(10px + 1vmin);
+  color: white;
+  padding: 0 25px;
+
+  @media screen and (min-width: 1250px) {
+    padding: 0 calc((100% - 1200px) / 2);
+  }
+
+  @media screen and (max-width: 800px) {
+    padding: 0 10px;
+  }
+}
+
+.NavBtn.NavBtn {
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  padding: 4px 7px;
+  letter-spacing: 1px;
+  outline: none;
+  color: #fff;
+  background: #226fbe;
+  transition: none;
+  border: 2px solid #226fbe;
+  border-radius: 2px;
+
+  &:hover {
+    background: transparent;
+    color: #226fbe;
+  }
+}
+
+.AppHeaderInner {
+  max-width: 1200px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+
+  a {
+    color: #61dafb;
+    text-decoration: none;
+  }
+
+  [id='logo'] {
+    font-size: 1.3em;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+    font-weight: bold;
+    text-decoration: none;
+
+    @media screen and (max-width: 800px) {
+      font-size: 1.1em;
+    }
+
+    &:hover {
+      color: #ffffff;
+      text-decoration: none;
+    }
+  }
+
+  nav {
+    justify-self: end;
+  }
+
+  ul {
+    display: flex;
+    list-style: none;
+    align-items: center;
+
+    li {
+      margin: 0 10px;
+
+      @media screen and (max-width: 800px) {
+        margin: 0 5px;
+      }
+    }
+  }
+}

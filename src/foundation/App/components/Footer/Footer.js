@@ -1,18 +1,15 @@
 import React from 'react';
+import * as styles from './footer.module.scss';
 
 function Footer() {
   return (
-    <footer class="footer">
+    <footer className={styles.Footer}>
       <nav>
         <ul>
           <li>
-            <a href="#" className="app-link">
+            <a href="/about" className="app-link">
               About
             </a>
-          </li>
-          <li></li>
-          <li>
-            <a href="https://news.railstutorial.org/">News</a>
           </li>
         </ul>
       </nav>

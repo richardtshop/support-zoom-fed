@@ -1,18 +1,10 @@
 import React from 'react';
-import * as styles from './styles.module.scss';
-import { PostFeed, UserInfo } from '../../components';
+import { useParams } from 'react-router-dom';
 
 function User() {
-  const user = { name: 'Richard', followers: 23, following: 15, microposts: [1, 2] };
+  const { id } = useParams();
 
-  return (
-    <div className={styles.UserPage}>
-      <aside>
-        <UserInfo user={user} />
-      </aside>
-      <PostFeed />
-    </div>
-  );
+  return <div>This is the page for user {id}</div>;
 }
 
 export default User;
