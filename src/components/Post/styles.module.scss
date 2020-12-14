@@ -1,12 +1,17 @@
 .Post {
   list-style: none;
-
   border-bottom: 1px solid #ddd;
   margin-bottom: 15px;
   display: grid;
   grid-template-columns: auto 1fr;
   grid-gap: 20px;
   padding-bottom: 15px;
+}
+
+.User {
+  a {
+    text-decoration: none;
+  }
 }
 
 .PostInner {

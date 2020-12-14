@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class Nav extends Component {
-  render() {
+function Nav(){
     return (
       <header className="app-header">
         <div className="app-header--inner">
@@ -27,7 +26,6 @@ class Nav extends Component {
         </div>
       </header>
     );
-  }
 }
 
 export default Nav;
