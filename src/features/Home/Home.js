@@ -4,7 +4,7 @@ import { Layout } from '@shopify/polaris';
 import { PostFeed, UserInfo, PostForm } from '../../components';
 
 function Home() {
-  const user = { name: 'Richard', followers: 23, following: 15, microposts: [1, 2] };
+  const user = { name: 'Richard', followers: 23, following: 15, microposts: [1, 2], email: "example@railstutorial.org" };
 
   return (
     <div className={styles.UserPage}>

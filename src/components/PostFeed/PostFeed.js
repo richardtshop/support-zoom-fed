@@ -22,6 +22,7 @@ function PostFeed() {
         createdAt
         user {
           name
+          email
         }
       }
     }
@@ -32,10 +33,9 @@ function PostFeed() {
       {({ loading, error, data }) => {
         if (loading) return <h3>Loading...</h3>;
         if (error) {
-          console.log(error);
-          return <h3>Error...</h3>;
+          console.error(error);
+          return <h2>Error...</h2>;
         }
-        console.log(data.microposts[0]);
         return (
           <div className={styles.PostFeed}>
             <h2>Whitter feed</h2>
