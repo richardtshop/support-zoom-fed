@@ -7,7 +7,7 @@ function Nav() {
   return (
     <header className={styles.AppHeader}>
       <div className={styles.AppHeaderInner}>
-        <Link id="logo" href="/">
+        <Link id="logo" to="/">
           Curds and Whey 🧀
         </Link>
         <nav className="nav">
