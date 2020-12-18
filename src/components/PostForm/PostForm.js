@@ -44,18 +44,27 @@ function PostForm() {
   const handleSubmit = useCallback(
     (event) => {
       event.preventDefault();
-      // setPost('');
-      // setTag('');
-      
-      // TO DO - update UI after posting
+
+      // POST mutation and update UI
       addPost({
         variables: { content, tag },
-        update: (cache, { data: { addPost } }) => {
-          const micropostData = cache.readQuery({ query: POSTS_QUERY });
-          const newData = [...micropostData.microposts, addPost];
-          cache.writeQuery({ query: POSTS_QUERY, data: newData });
+        update(cache, { data: { addPost } }) {
+          cache.modify({
+            fields: {
+              microposts(exisitingMicroposts = []) {
+                const newMicropostRef = cache.writeQuery({
+                  data: addPost,
+                  query: POSTS_QUERY,
+                });
+                return [...exisitingMicroposts, newMicropostRef];
+              },
+            },
+          });
         },
       });
+
+      setContent('');
+      setTag('');
     },
     [content, tag, addPost],
   );

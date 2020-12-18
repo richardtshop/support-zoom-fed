@@ -4,14 +4,7 @@ import './index.css';
 import App from './foundation/App/App';
 import reportWebVitals from './reportWebVitals';
 
-// import { ApolloProvider } from 'react-apollo';
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
-import { createHttpLink } from 'apollo-link-http';
-// import { InMemoryCache } from 'apollo-cache-inmemory';
-
-const link = createHttpLink({
-  uri: 'https://support-zoom-rails-tutorial-2020.myshopify.io/graphql',
-});
 
 const client = new ApolloClient({
   uri: 'https://support-zoom-rails-tutorial-2020.myshopify.io/graphql',
