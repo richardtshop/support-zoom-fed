@@ -7,10 +7,10 @@ function PostForm() {
 
   const handleSubmit = useCallback((event) => {
     event.preventDefault();
-    console.log('Posted');
-    setPost('');
-    setTag('');
-  }, []);
+    console.log({ post, tag });
+    // setPost('');
+    // setTag('');
+  }, [post, tag]);
 
   const handlePostChange = useCallback((value) => setPost(value), []);
   const handleTagChange = useCallback((value) => setTag(value), []);

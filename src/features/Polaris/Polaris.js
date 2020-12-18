@@ -27,7 +27,7 @@ const POST_QUERY = gql`
 
 function Polaris() {
   const params = useParams();
-  const id = params.id === undefined ? 1 : params.id;
+  const id = params.id === undefined ? 1 : params.id;  // Load default first post if no params
 
   const { loading, error, data } = useQuery(POST_QUERY, {
     variables: { id },

@@ -5,7 +5,7 @@
 
 import React from 'react';
 import * as styles from './styles.module.scss';
-import { Query, useQuery } from 'react-apollo';
+import { Query, /*useQuery*/ } from 'react-apollo';
 import { DisplayText } from '@shopify/polaris';
 import Post from '../Post';
 
@@ -28,6 +28,13 @@ const POSTS_QUERY = gql`
 `;
 
 function PostFeed() {
+  // const { loading, error, data } = useQuery(POSTS_QUERY);
+  // if (loading) return <h3>Loading...</h3>;
+  // if (error) {
+  //   console.error(error);
+  //   return <h2>Error...</h2>;
+  // }
+
   return (
     <Query query={POSTS_QUERY}>
       {({ loading, error, data }) => {
