@@ -1,20 +1,48 @@
 import React from 'react';
-import { Layout, Page, Card } from '@shopify/polaris';
+import { Layout, Page } from '@shopify/polaris';
 import { Post } from '../../components';
 
+import { Query, useQuery } from 'react-apollo';
+
+import { useParams } from 'react-router-dom';
+
+import { gql } from 'apollo-boost';
+
+// import IncidentsQuery from './graphql/IncidentsQuery.graphql';
+
+const POST_QUERY = gql`
+  query Micropost($id: ID!) {
+    micropost(id: $id) {
+      id
+      content
+      tag
+      createdAt
+      user {
+        name
+        email
+      }
+    }
+  }
+`;
+
 function Polaris() {
-  const fakePost = {
-    user: 'User',
-    content:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam at mollis orci, et fringilla est. Mauris a nuncnec tortor dapibus dictum. Suspendisse laoreet, lorem a laoreet consequat, turpis augue volutpat neque, atmollis dui dolor at leo. Curabitur aliquet mollis metus nec mollis. Nam lobortis ultricies arcu, eget egestasturpis consequat ac',
-    tag: 'tag',
-  };
+  const params = useParams();
+  const id = params.id === undefined ? 1 : params.id;
+
+  const { loading, error, data } = useQuery(POST_QUERY, {
+    variables: { id },
+  });
+  if (loading) return <h3>Loading...</h3>;
+  if (error) {
+    console.log(error);
+    return <h3>error...</h3>;
+  }
 
   return (
     <Page fullWidth title="Polaris">
       <Layout>
         <Layout.Section>
-          <Post post={fakePost} />
+          <Post post={data.micropost} />
         </Layout.Section>
       </Layout>
     </Page>

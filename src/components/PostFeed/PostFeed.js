@@ -5,29 +5,29 @@
 
 import React from 'react';
 import * as styles from './styles.module.scss';
-import { Query } from 'react-apollo';
+import { Query, useQuery } from 'react-apollo';
+import { DisplayText } from '@shopify/polaris';
 import Post from '../Post';
 
 import { gql } from 'apollo-boost';
 
 // import IncidentsQuery from './graphql/IncidentsQuery.graphql';
-
-function PostFeed() {
-  const POSTS_QUERY = gql`
-    {
-      microposts {
-        id
-        content
-        tag
-        createdAt
-        user {
-          name
-          email
-        }
+const POSTS_QUERY = gql`
+  {
+    microposts {
+      id
+      content
+      tag
+      createdAt
+      user {
+        name
+        email
       }
     }
-  `;
+  }
+`;
 
+function PostFeed() {
   return (
     <Query query={POSTS_QUERY}>
       {({ loading, error, data }) => {
@@ -38,7 +38,7 @@ function PostFeed() {
         }
         return (
           <div className={styles.PostFeed}>
-            <h2>Whitter feed</h2>
+            <DisplayText size="large">Whitter feed</DisplayText>
             <ul>
               {data.microposts.map((post, index) => (
                 <Post key={`post--${index}`} post={post} />
