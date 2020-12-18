@@ -42,26 +42,35 @@ function PostForm() {
   const [tag, setTag] = useState('');
 
   const handleSubmit = useCallback(
-    (event) => {
+    async (event) => {
       event.preventDefault();
 
       // POST mutation and update UI
-      addPost({
-        variables: { content, tag },
-        update(cache, { data: { addPost } }) {
-          cache.modify({
-            fields: {
-              microposts(exisitingMicroposts = []) {
-                const newMicropostRef = cache.writeQuery({
-                  data: addPost,
-                  query: POSTS_QUERY,
-                });
-                return [...exisitingMicroposts, newMicropostRef];
+      try {
+        const micropost = await addPost({
+          variables: { content, tag },
+          update(cache, { data: { addPost } }) {
+            cache.modify({
+              fields: {
+                microposts(exisitingMicroposts = []) {
+                  const newMicropostRef = cache.writeQuery({
+                    data: addPost,
+                    query: POSTS_QUERY,
+                  });
+                  return [...exisitingMicroposts, newMicropostRef];
+                },
               },
-            },
-          });
-        },
-      });
+            });
+          },
+        });
+        
+        // micropost variable will return update values.
+        // TO DO update Rails to include errors that can be accessed on this object
+        console.log(micropost);
+      } catch (err) {
+        // TO DO handle failur error;
+        console.log(err);
+      }
 
       setContent('');
       setTag('');
