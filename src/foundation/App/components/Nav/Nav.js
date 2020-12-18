@@ -1,35 +1,37 @@
 import React from 'react';
 import * as styles from './nav.module.scss';
 
+import { Link } from 'react-router-dom';
+
 function Nav() {
   return (
     <header className={styles.AppHeader}>
       <div className={styles.AppHeaderInner}>
-        <a id="logo" href="/">
+        <Link id="logo" href="/">
           Curds and Whey 🧀
-        </a>
+        </Link>
         <nav className="nav">
           <ul className="nav-links">
             <li>
-              <a href="/" className="app-link">
+              <Link to="/" className="app-link">
                 Home
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/about" className="app-link">
+              <Link to="/about" className="app-link">
                 About
-              </a>
+              </Link>
             </li>
 
             <li>
-              <a href="#" className="app-link">
+              <Link to="#" className="app-link">
                 Log in
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className={`app-link ${styles.NavBtn}`}>
+              <Link to="#" className={`app-link ${styles.NavBtn}`}>
                 New post
-              </a>
+              </Link>
             </li>
           </ul>
         </nav>

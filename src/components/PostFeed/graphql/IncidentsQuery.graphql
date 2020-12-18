@@ -1,0 +1,10 @@
+query Microposts {
+  microposts {
+    id
+    content
+    createdAt
+    user {
+      name
+    }
+  }
+}

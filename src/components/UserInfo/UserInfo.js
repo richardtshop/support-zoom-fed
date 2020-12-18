@@ -1,12 +1,18 @@
 import React from 'react';
 import * as styles from './styles.module.scss';
+import md5 from 'md5';
 
 function UserInfo({ user }) {
-  const { name, microposts, following, followers } = user;
+  const { name, microposts, following, followers, email } = user;
+  
+  const gravatar_id = md5(email);
+  const size = 80;
+  const gravatar_url = `https://secure.gravatar.com/avatar/${gravatar_id}?s=${size}`;
+  
   return (
     <div className={styles.UserInfo}>
       <section className="user-info">
-        <img className="gravatar" src="" alt="user gravatar" />
+        <img className="gravatar" src={gravatar_url} alt="user gravatar" />
 
         <span>
           <h1>{name}</h1>
@@ -35,3 +41,7 @@ function UserInfo({ user }) {
 }
 
 export default UserInfo;
+
+
+
+

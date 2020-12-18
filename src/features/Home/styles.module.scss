@@ -2,8 +2,13 @@
   height: 100%;
   display: grid;
   grid-template-columns: 1fr 2fr;
+  justify-content: center;
 
   @media screen and (max-width: 800px) {
     grid-template-columns: 1fr;
   }
+}
+
+.SideBar {
+  padding-right: 15px;
 }
