@@ -5,7 +5,7 @@
 ### Backend
 
 <details>
-<summary>Backend</summary>
+<summary>CORS and schema.rb</summary>
 Added the following to `schema.rb` to allow mutations to work.
 
 ```rb
