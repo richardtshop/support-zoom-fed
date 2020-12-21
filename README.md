@@ -1,70 +1,154 @@
-# Getting Started with Create React App
+# Week 4 notes
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Mutations
 
-## Available Scripts
+### Backend
 
-In the project directory, you can run:
+Added the following to `schema.rb` to allow mutations to work.
 
-### `yarn start`
+```rb
+mutation(Types::MutationType)
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Cors issue - but it resolved it for me for the time being in config/application.rb
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```rb
 
-### `yarn test`
+module SupportZoomRailsTutorial2020
+  class Application < Rails::Application
+    ...
+    # Start of added cors middleware
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+         origins '*'
+         resource '*', :headers => :any, :methods => [:get, :post, :options]
+       end
+    end
+    # End of cors middleware
+    ...
+  end
+end
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Fronted
 
-### `yarn build`
+#### Apollo hooks
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Getting an error when trying to add `useMutation` from `@apollo/react-hooks`.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Some research showed this was likely due to conflicts in packages that had been previously used.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Updated to used `@apollo/client`
 
-### `yarn eject`
+OLD index.js
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```js
+...
+import { ApolloProvider } from 'react-apollo';
+import { ApolloClient } from 'apollo-client';
+import { createHttpLink } from 'apollo-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+const link = createHttpLink({
+  uri: 'https://support-zoom-rails-tutorial-2020.myshopify.io/graphql',
+});
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+const client = new ApolloClient({
+  link,
+  cache: new InMemoryCache(),
+});
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+ReactDOM.render(
+  <React.StrictMode>
+    <ApolloProvider client={client}>
+      <App />
+    </ApolloProvider>
+  </React.StrictMode>,
+  document.getElementById('root'),
+);
+...
+```
 
-## Learn More
+NEW index.js (not package imports and client now takes uri directly.)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```js
+...
+import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+const client = new ApolloClient({
+  uri: 'https://support-zoom-rails-tutorial-2020.myshopify.io/graphql',
+  cache: new InMemoryCache(),
+});
 
-### Code Splitting
+ReactDOM.render(
+  <ApolloProvider client={client}>
+    <App />
+  </ApolloProvider>,
+  document.getElementById('root'),
+);
+...
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+`useQuery`, `useMutation` and `gql` all now importated from `@apollo/client`
 
-### Analyzing the Bundle Size
+#### Updating UI after mutation
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+<details>
+<summary>Updating UI after mutation</summary>
 
-### Making a Progressive Web App
+https://www.apollographql.com/docs/react/data/mutations/ - but use `writeQuery` instead of write fragment, and pass microposts query.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```js
+const GET_TODOS = gql`
+  query GetTodos {
+    todos {
+      id
+    }
+  }
+`;
 
-### Advanced Configuration
+function AddTodo() {
+  let input;
+  const [addTodo] = useMutation(ADD_TODO, {
+    update(cache, { data: { addTodo } }) {
+      cache.modify({
+        fields: {
+          todos(existingTodos = []) {
+            const newTodoRef = cache.writeFragment({
+              data: addTodo,
+              fragment: gql`
+                fragment NewTodo on Todo {
+                  id
+                  type
+                }
+              `,
+            });
+            return [...existingTodos, newTodoRef];
+          },
+        },
+      });
+    },
+  });
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+  return (
+    <div>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          addTodo({ variables: { type: input.value } });
+          input.value = '';
+        }}
+      >
+        <input
+          ref={(node) => {
+            input = node;
+          }}
+        />
+        <button type="submit">Add Todo</button>
+      </form>
+    </div>
+  );
+}
+```
 
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+</details>
