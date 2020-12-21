@@ -2,8 +2,10 @@
 
 ## Mutations
 
+### Backend
+
 <details>
-<summary>### Backend</summary>
+<summary>Backend</summary>
 Added the following to `schema.rb` to allow mutations to work.
 
 ```rb
@@ -28,17 +30,18 @@ module SupportZoomRailsTutorial2020
     ...
   end
 end
+```
+
 </details>
 
 ### Backend
 
-
-```
+````
 
 ### Frontend
 
 <details>
-<summary>#### Apollo hooks</summary>
+<summaryApollo hooks</summary>
 
 Getting an error when trying to add `useMutation` from `@apollo/react-hooks`.
 
@@ -73,7 +76,7 @@ ReactDOM.render(
   document.getElementById('root'),
 );
 ...
-```
+````
 
 NEW index.js (not package imports and client now takes uri directly.)
 
@@ -100,7 +103,7 @@ ReactDOM.render(
 </details>
 
 <details>
-<summary>#### Updating UI after mutation</summary>
+<summaryUpdating UI after mutation</summary>
 
 https://www.apollographql.com/docs/react/data/mutations/ - but use `writeQuery` instead of write fragment, and pass microposts query.
 
