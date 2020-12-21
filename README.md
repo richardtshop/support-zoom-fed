@@ -99,7 +99,7 @@ ReactDOM.render(
 </details>
 
 <details>
-<summaryUpdating UI after mutation</summary>
+<summary>Updating UI after mutation</summary>
 
 https://www.apollographql.com/docs/react/data/mutations/ - but use `writeQuery` instead of write fragment, and pass microposts query.
 
