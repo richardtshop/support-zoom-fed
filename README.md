@@ -34,14 +34,10 @@ end
 
 </details>
 
-### Backend
-
-````
-
 ### Frontend
 
 <details>
-<summaryApollo hooks</summary>
+<summary>Apollo hooks</summary>
 
 Getting an error when trying to add `useMutation` from `@apollo/react-hooks`.
 
@@ -76,7 +72,7 @@ ReactDOM.render(
   document.getElementById('root'),
 );
 ...
-````
+```
 
 NEW index.js (not package imports and client now takes uri directly.)
 
