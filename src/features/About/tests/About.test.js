@@ -4,7 +4,7 @@ import { mount } from '@shopify/react-testing';
 import '@shopify/react-testing/matchers';
 
 describe('<About />', () => {
-  it('has an h2 element with text content react', () => {
+  it('has an h2 element with text react html content', () => {
     const wrapper = mount(<About/>);
     expect(wrapper).toContainReactHtml('<h2>About</h2>');
   });
