@@ -1,4 +1,4 @@
-import '../../../test-utilities/matchMedia.mock';
+// import '../../../test-utilities/matchMedia.mock';
 import React from 'react';
 import Post from '../Post';
 import { Card } from '@shopify/polaris';
