@@ -1,42 +1,10 @@
 import React, { useState, useCallback } from 'react';
 import { Card, Form, FormLayout, TextField, Button } from '@shopify/polaris';
 import { useMutation } from '@apollo/client';
-
-import gql from 'graphql-tag';
-
-const POSTS_QUERY = gql`
-  {
-    microposts {
-      id
-      content
-      tag
-      createdAt
-      user {
-        name
-        email
-      }
-    }
-  }
-`;
-
-const ADD_POST = gql`
-  mutation CreatePost($content: String!, $tag: String) {
-    createMicropost(input: { micropostRequest: { content: $content, tag: $tag, userId: 1 } }) {
-      micropost {
-        id
-        content
-        tag
-        createdAt
-        user {
-          name
-        }
-      }
-    }
-  }
-`;
+import { POSTS_QUERY, ADD_POST_MUTATION } from './graphql';
 
 function PostForm() {
-  const [addPost, { loading: mutationLoading, error: mutationError }] = useMutation(ADD_POST);
+  const [addPost, { loading: mutationLoading, error: mutationError }] = useMutation(ADD_POST_MUTATION);
 
   const [content, setContent] = useState('');
   const [tag, setTag] = useState('');
@@ -63,13 +31,13 @@ function PostForm() {
             });
           },
         });
-        
+
         // micropost variable will return update values.
         // TO DO update Rails to include errors that can be accessed on this object
-        console.log(micropost);
+        // console.log(micropost);
       } catch (err) {
-        // TO DO handle failur error;
-        console.log(err);
+        // TO DO handle failure error;
+        // console.log(err);
       }
 
       setContent('');

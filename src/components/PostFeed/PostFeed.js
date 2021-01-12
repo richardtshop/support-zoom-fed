@@ -1,10 +1,13 @@
+// TO DO
+// Skeleton loading
+
 import React from 'react';
 import * as styles from './styles.module.scss';
 import { useQuery } from '@apollo/client';
 import { DisplayText } from '@shopify/polaris';
 import Post from '../Post';
 
-import POSTS_QUERY from './graphql/PostsQuery.js';
+import { POSTS_QUERY } from './graphql';
 
 function PostFeed() {
   const { loading, error, data } = useQuery(POSTS_QUERY);
