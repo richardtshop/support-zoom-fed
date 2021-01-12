@@ -1,6 +1,5 @@
 import React from 'react';
 import * as styles from './styles.module.scss';
-import { Layout } from '@shopify/polaris';
 import { PostFeed, UserInfo, PostForm } from '../../components';
 
 function Home() {

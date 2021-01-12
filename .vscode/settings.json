@@ -1,0 +1,27 @@
+{
+  "workbench.colorCustomizations": {
+    // https://coolors.co/
+    "activityBar.foreground": "#ffffff",
+    "activityBarBadge.background": "#ffffff",
+    "tab.activeBorder": "#ffffff",
+    "tab.activeForeground": "#ffffff",
+    "tab.unfocusedActiveForeground": "#eeeeee",
+    "tab.inactiveForeground": "#bbbbbb",
+    "tab.unfocusedInactiveForeground": "#bbbbbb",
+    "activityBar.background": "#008060",
+    "activityBarBadge.foreground": "#008060",
+    "tab.activeBackground": "#008060",
+    "tab.unfocusedActiveBackground": "#00664d",
+    "tab.inactiveBackground": "#00664d",
+    "tab.unfocusedInactiveBackground": "#00664d",
+    "badge.background": "#ffffff"
+  },
+  // https://github.com/vscode-icons/vscode-icons/wiki/ListOfFiles
+  "vsicons.presets.jsOfficial": true,
+  "vsicons.associations.files": [
+    {
+      "icon": "text",
+      "extensions": ["md", "mdown", "markdown"]
+    }
+  ]
+}

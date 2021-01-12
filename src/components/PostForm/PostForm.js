@@ -1,53 +1,24 @@
 import React, { useState, useCallback } from 'react';
 import { Card, Form, FormLayout, TextField, Button } from '@shopify/polaris';
 import { useMutation } from '@apollo/client';
-
-import gql from 'graphql-tag';
-
-const POSTS_QUERY = gql`
-  {
-    microposts {
-      id
-      content
-      tag
-      createdAt
-      user {
-        name
-        email
-      }
-    }
-  }
-`;
-
-const ADD_POST = gql`
-  mutation CreatePost($content: String!, $tag: String) {
-    createMicropost(input: { micropostRequest: { content: $content, tag: $tag, userId: 1 } }) {
-      micropost {
-        id
-        content
-        tag
-        createdAt
-        user {
-          name
-        }
-      }
-    }
-  }
-`;
+import { POSTS_QUERY, ADD_POST_MUTATION } from './graphql';
 
 function PostForm() {
-  const [addPost, { loading: mutationLoading, error: mutationError }] = useMutation(ADD_POST);
+  const [success, updateSuccess] = useState('');
+  const [addPost, { loading: mutationLoading, error: mutationError }] = useMutation(ADD_POST_MUTATION);
 
   const [content, setContent] = useState('');
   const [tag, setTag] = useState('');
 
   const handleSubmit = useCallback(
-    async (event) => {
-      event.preventDefault();
-
+    // TO DO should this be async and await addPost?
+    // Was like that previously, but doesn't require it
+    // Yes, prevents uncuaght error if form submitted with no content.
+    // TO DO, don't mutate with no content
+    async (_event) => {
       // POST mutation and update UI
       try {
-        const micropost = await addPost({
+        const _micropost = await addPost({
           variables: { content, tag },
           update(cache, { data: { addPost } }) {
             cache.modify({
@@ -63,13 +34,14 @@ function PostForm() {
             });
           },
         });
-        
+        // TO DO update function could be moved to useMutation as object argument after ADD_POST_MUTATION
         // micropost variable will return update values.
         // TO DO update Rails to include errors that can be accessed on this object
-        console.log(micropost);
+        // console.log(micropost);
+        updateSuccess('Success');
       } catch (err) {
-        // TO DO handle failur error;
-        console.log(err);
+        // TO DO handle failure error;
+        // console.log(err);
       }
 
       setContent('');
@@ -106,6 +78,7 @@ function PostForm() {
       </Form>
       {mutationLoading && <p>Loading...</p>}
       {mutationError && <p>Error :( Please try again</p>}
+      {(!mutationLoading && !mutationError) && success}
     </Card>
   );
 }

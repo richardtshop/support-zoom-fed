@@ -15,7 +15,7 @@ function UserInfo({ user }) {
         <img className="gravatar" src={gravatar_url} alt="user gravatar" />
 
         <span>
-          <h1>{name}</h1>
+          <h2>{name}</h2>
           <span>
             <a href="/">View my profile</a>
           </span>

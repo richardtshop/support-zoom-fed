@@ -12,16 +12,31 @@
     "graphql": "^15.4.0",
     "md5": "^2.3.0",
     "node-sass": "^4.0.0",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
+    "react": "^16.0.1",
+    "react-dom": "^16.0.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
     "web-vitals": "^0.2.4"
   },
+  "babel": {
+    "presets": [
+      "@babel/preset-react",
+      "@babel/preset-env"
+    ],
+    "plugins": [
+      "@babel/plugin-transform-runtime"
+    ]
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png)$": "<rootDir>/_mocks_/fileMock.js",
+      "\\.(css|less|scss)$": "identity-obj-proxy"
+    }
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "jest",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -43,6 +58,11 @@
     ]
   },
   "devDependencies": {
-    "@shopify/react-testing": "^2.2.0"
+    "@babel/plugin-transform-runtime": "^7.12.10",
+    "@babel/preset-react": "^7.12.10",
+    "@shopify/react-testing": "^2.2.0",
+    "identity-obj-proxy": "^3.0.0",
+    "react-test-renderer": "^17.0.1",
+    "waait": "^1.0.5"
   }
 }
