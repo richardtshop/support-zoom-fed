@@ -1,17 +1,18 @@
 // TO DO extract gravatar function to helper
 
 import React from 'react';
-import * as styles from './styles.module.scss';
-import { Card } from '@shopify/polaris';
+import {Card} from '@shopify/polaris';
 import md5 from 'md5';
 
-function Post({ post }) {
-  const { tag, content, user, createdAt } = post;
+import * as styles from './styles.module.scss';
+
+function Post({post}) {
+  const {tag, content, user, createdAt} = post;
   const [date, time] = createdAt.split('T');
-  const { name, email } = user;
-  const gravatar_id = md5(email);
+  const {name, email} = user;
+  const gravatarId = md5(email);
   const size = 80;
-  const gravatar_url = `https://secure.gravatar.com/avatar/${gravatar_id}?s=${size}`;
+  const gravatarUrl = `https://secure.gravatar.com/avatar/${gravatarId}?s=${size}`;
 
   const tagMarkup =
     tag.length > 0 ? (
@@ -23,7 +24,11 @@ function Post({ post }) {
   return (
     <Card sectioned>
       <li className={styles.Post}>
-        <img className={styles.Gravatar} src={gravatar_url} alt="user gravatar" />
+        <img
+          className={styles.Gravatar}
+          src={gravatarUrl}
+          alt="user gravatar"
+        />
         <span className={styles.PostInner}>
           <span className={styles.User}>
             <a href="/">{name}</a>

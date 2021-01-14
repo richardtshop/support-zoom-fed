@@ -1,3 +1,3 @@
-import { POSTS_QUERY } from './PostsQuery';
+import {POSTS_QUERY} from './PostsQuery';
 
-export { POSTS_QUERY };
+export {POSTS_QUERY};

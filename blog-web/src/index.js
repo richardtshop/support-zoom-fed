@@ -1,10 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import {ApolloProvider, ApolloClient, InMemoryCache} from '@apollo/client';
+
+// eslint-disable-next-line @shopify/strict-component-boundaries
 import App from './foundation/App/App';
 import reportWebVitals from './reportWebVitals';
 
-import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
 
 const client = new ApolloClient({
   uri: 'https://support-zoom-rails-tutorial-2020.myshopify.io/graphql',

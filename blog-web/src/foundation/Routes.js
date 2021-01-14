@@ -4,8 +4,9 @@
 // The route does NOT need to be linked too in your blog, but the url 'localhost:3000/Polaris' should bring up the page. Use this page as a place to experiment with Polaris Components and see if any could be useful in other places in your blog.
 
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
-import { Home, About, Users, User, Polaris } from '../features';
+import {Switch, Route} from 'react-router-dom';
+
+import {Home, About, Users, User, Polaris} from '../features';
 
 function Routes() {
   return (

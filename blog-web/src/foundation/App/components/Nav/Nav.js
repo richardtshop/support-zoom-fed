@@ -1,14 +1,15 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
+
 import * as styles from './nav.module.scss';
 
-import { Link } from 'react-router-dom';
 
 function Nav() {
   return (
     <header className={styles.AppHeader}>
       <div className={styles.AppHeaderInner}>
         <Link id="logo" to="/">
-          Curds and Whey 🧀
+          Curds and Whey <span role="img" aria-label="cheese emoji">🧀</span>
         </Link>
         <nav className="nav">
           <ul className="nav-links">

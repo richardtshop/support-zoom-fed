@@ -39,6 +39,7 @@
     "test": "jest",
     "eject": "react-scripts eject"
   },
+  "prettier": "@shopify/prettier-config",
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -60,7 +61,10 @@
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^7.12.10",
     "@babel/preset-react": "^7.12.10",
+    "@shopify/eslint-plugin": "^39.0.4",
+    "@shopify/prettier-config": "^1.1.2",
     "@shopify/react-testing": "^2.2.0",
+    "eslint": "^7.17.0",
     "identity-obj-proxy": "^3.0.0",
     "react-test-renderer": "^17.0.1",
     "waait": "^1.0.5"
