@@ -17,7 +17,7 @@ const theme = {
 
 
 ReactDOM.render(
-  <AppProvider theme={theme} i18n={enTranslations}  features={{newDesignLanguage: false}} >
+  <AppProvider theme={theme} i18n={enTranslations} features={{newDesignLanguage: false}} >
     <App />
   </AppProvider>,
   document.getElementById('root'),

@@ -1,10 +1,8 @@
 {
-  "extends": [
-    "plugin:@shopify/esnext",
-    "plugin:@shopify/react"
-  ],
+  "extends": ["plugin:@shopify/esnext", "plugin:@shopify/react"],
   "rules": {
     "@shopify/jsx-no-hardcoded-content": "off",
-    "react/prop-types": "off"
+    "react/prop-types": "off",
+    "no-unlimited-disable": "off"
   }
 }

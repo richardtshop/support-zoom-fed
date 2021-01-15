@@ -13,6 +13,7 @@ import {
   OnlineStoreMajor,
   CirclePlusOutlineMinor,
   ViewMinor,
+  SettingsMinor,
 } from '@shopify/polaris-icons';
 
 import {Home, Orders, Products} from './components';
@@ -91,6 +92,7 @@ function App() {
         ]}
       />
       <Navigation.Section
+        fill
         title="Sales Channels"
         items={[
           {
@@ -113,13 +115,7 @@ function App() {
         items={[
           {
             label: 'Settings',
-            onClick: () => setPageMarkup('empty'),
-            icon: OnlineStoreMajor,
-            secondaryAction: {
-              url: '/admin/orders/add',
-              accessibilityLabel: 'Add an order',
-              icon: ViewMinor,
-            },
+            icon: SettingsMinor,
           },
         ]}
       />
