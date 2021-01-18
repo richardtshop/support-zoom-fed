@@ -6,7 +6,10 @@ import {POSTS_QUERY, ADD_POST_MUTATION} from './graphql';
 
 function PostForm() {
   const [success, updateSuccess] = useState('');
-  const [addPost, {loading: mutationLoading, error: mutationError}] = useMutation(ADD_POST_MUTATION);
+  const [
+    addPost,
+    {loading: mutationLoading, error: mutationError},
+  ] = useMutation(ADD_POST_MUTATION);
 
   const [content, setContent] = useState('');
   const [tag, setTag] = useState('');
@@ -14,14 +17,14 @@ function PostForm() {
   const handleSubmit = useCallback(
     // TO DO should this be async and await addPost?
     // Was like that previously, but doesn't require it
-    // Yes, prevents uncuaght error if form submitted with no content.
+    // Yes, prevents uncaught error if form submitted with no content.
     // TO DO, don't mutate with no content
     // eslint-disable-next-line no-unused-vars
     async (_event) => {
       // POST mutation and update UI
       try {
         const _micropost = await addPost({
-          variables: {content, tag},
+          variables: {content, tag, userId: "1"},
           update(cache, {data: {addPostData}}) {
             cache.modify({
               fields: {
@@ -39,8 +42,7 @@ function PostForm() {
         // TO DO update function could be moved to useMutation as object argument after ADD_POST_MUTATION
         // micropost variable will return update values.
         // TO DO update Rails to include errors that can be accessed on this object
-        // eslint-disable-next-line no-console
-        console.log(_micropost);
+        // console.log(_micropost);
         updateSuccess('Success');
       } catch (err) {
         // TO DO handle failure error;
@@ -81,7 +83,7 @@ function PostForm() {
       </Form>
       {mutationLoading && <p>Loading...</p>}
       {mutationError && <p>Error :( Please try again</p>}
-      {(!mutationLoading && !mutationError) && success}
+      {!mutationLoading && !mutationError && success}
     </Card>
   );
 }

@@ -8,8 +8,8 @@ import * as styles from './styles.module.scss';
 
 function Post({post}) {
   const {tag, content, user, createdAt} = post;
-  const [date, time] = createdAt.split('T');
   const {name, email} = user;
+  const [date, time] = createdAt.split('T');
   const gravatarId = md5(email);
   const size = 80;
   const gravatarUrl = `https://secure.gravatar.com/avatar/${gravatarId}?s=${size}`;

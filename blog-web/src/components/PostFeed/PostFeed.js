@@ -25,7 +25,7 @@ function PostFeed() {
       <DisplayText size="large">Whitter feed</DisplayText>
       <ul>
         {data.microposts.map((post) => (
-          <Post key={`post--${post.createdAt}`} post={post} />
+          <Post key={`post--${post.createdAt}-${Math.random()}`} post={post} />
         ))}
       </ul>
     </div>
