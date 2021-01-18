@@ -1,8 +1,8 @@
-import '../../../test-utilities/matchMedia.mock';
 import '@shopify/react-testing/matchers';
 import React from 'react';
+import {mount} from '@shopify/react-testing';
+
 import UserInfo from '../UserInfo';
-import { mount } from '@shopify/react-testing';
 
 describe('<Post />', () => {
   it('passes user props to component', () => {
@@ -36,7 +36,7 @@ describe('<Post />', () => {
     const wrapper = mount(<UserInfo user={user} />);
     expect(wrapper).toContainReactHtml('<h2>Richard</h2>');
     expect(wrapper).toContainReactHtml('<span>2 microposts</span>');
-    expect(wrapper).toContainReactText('15following');
-    expect(wrapper).toContainReactText('23followers');
+    expect(wrapper).toContainReactText('15 following');
+    expect(wrapper).toContainReactText('23 followers');
   });
 });
