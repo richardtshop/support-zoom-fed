@@ -266,6 +266,7 @@ function Home() {
               height: '0.1rem',
               width: '100%',
               background: '#dfe3e8',
+              margin: '0',
             }}
           />
           <div style={{flexGrow: '1', backgroundColor: '#f9fafb'}}>
