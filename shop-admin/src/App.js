@@ -27,11 +27,7 @@ function App() {
   );
 
   const searchFieldMarkup = (
-    <TopBar.SearchField
-      placeholder="Search"
-      // onChange={() => {}}
-      showFocusBorder
-    />
+    <TopBar.SearchField placeholder="Search" showFocusBorder />
   );
 
   const topBarMarkup = (
@@ -97,6 +93,7 @@ function App() {
         items={[
           {
             label: 'Online Store',
+            url: '/test',
             onClick: () => setPageMarkup('empty'),
             icon: OnlineStoreMajor,
             secondaryAction: {
@@ -147,12 +144,10 @@ export default App;
 function Empty() {
   return (
     <EmptyState
-      heading="Manage your inventory transfers"
-      action={{content: 'Add transfer'}}
-      secondaryAction={{content: 'Learn more', url: 'https://help.shopify.com'}}
+      heading="Nothing to see here"
       image="https://cdn.shopify.com/s/files/1/0757/9955/files/empty-state.svg"
     >
-      <p>Track and receive your incoming inventory from suppliers.</p>
+      <p>These pages are empty!</p>
     </EmptyState>
   );
 }
