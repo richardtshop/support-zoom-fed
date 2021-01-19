@@ -97,6 +97,7 @@ function App() {
         items={[
           {
             label: 'Online Store',
+            url: "/test",
             onClick: () => setPageMarkup('empty'),
             icon: OnlineStoreMajor,
             secondaryAction: {
