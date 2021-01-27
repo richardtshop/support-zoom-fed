@@ -1,3 +1,5 @@
+// Sandbox link: https://codesandbox.io/s/shop-admin-clone-f0iz2?file=/src/components/Products/Products.js
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
