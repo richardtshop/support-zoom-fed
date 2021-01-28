@@ -1,11 +1,12 @@
 // To Do
 //
-// Filters
+// Text
 // Sorting
 // Tabs
 // Currency conversion
 // Shift + select multiple orders
 // Capitalize labels
+// Refactor similar code for filters
 
 import React, {useState, useCallback} from 'react';
 import {
@@ -35,59 +36,74 @@ export default function Orders() {
   const [paymentStatusFilter, setPaymentStatusFilter] = useState(null);
   const [fulfillmentStatusFilter, setFulfillmentStatusFilter] = useState(null);
 
+  const defaultActiveFilters = {
+    status: [],
+    paymentStatus: [],
+    fulfillmentStatus: [],
+  };
+
+  const [activeFilters, setActiveFilters] = useState(defaultActiveFilters);
+
   const [queryValue, setQueryValue] = useState(null);
 
-  const filterOrder = useCallback((key, value) => {
-    const filteredOrders = displayedOrders.filter((order) => value.includes(order[key]));
-    setDisplayedOrders(filteredOrders);
-  }, [displayedOrders]);
+  const filterOrders = useCallback(
+    (filterKey, filterArray) => {
+      const newFilters = {
+        ...activeFilters,
+        [filterKey]: filterArray,
+      };
+      setActiveFilters(newFilters);
+
+      let filteredOrders = orders;
+
+      for (const [key, value] of Object.entries(newFilters)) {
+        if (value.length > 0) {
+          filteredOrders = filteredOrders.filter((order) => {
+            return value.includes(order[key]);
+          });
+        }
+        setDisplayedOrders(filteredOrders);
+      }
+    },
+    [activeFilters],
+  );
 
   const handleOrderStatusChange = useCallback(
     (value) => {
       setOrderStatusFilter(value);
-      if (value.length > 0) {
-        filterOrder('status', value);
-      }
+      filterOrders('status', value);
     },
-    [filterOrder],
+    [filterOrders],
   );
 
   const handleOrderStatusRemove = useCallback(() => {
     setOrderStatusFilter(null);
-    setDisplayedOrders(orders);
-  }, []);
+    filterOrders('status', []);
+  }, [filterOrders]);
 
   const handlePaymentStatusChange = useCallback(
     (value) => {
       setPaymentStatusFilter(value);
-      if (value.length > 0) {
-        filterOrder('paymentStatus', value);
-      } else {
-        setDisplayedOrders(orders);
-      }
+      filterOrders('paymentStatus', value);
     },
-    [filterOrder],
+    [filterOrders],
   );
   const handlePaymentStatusRemove = useCallback(() => {
     setPaymentStatusFilter(null);
-    setDisplayedOrders(orders);
-  }, []);
+    filterOrders('paymentStatus', []);
+  }, [filterOrders]);
 
   const handleFulfillmentStatusChange = useCallback(
     (value) => {
       setFulfillmentStatusFilter(value);
-      if (value.length > 0) {
-        filterOrder('fulfillmentStatus', value);
-      } else {
-        setDisplayedOrders(orders);
-      }
+      filterOrders('fulfillmentStatus', value);
     },
-    [filterOrder],
+    [filterOrders],
   );
   const handleFulfillmentStatusRemove = useCallback(() => {
     setFulfillmentStatusFilter(null);
-    setDisplayedOrders(orders);
-  }, []);
+    filterOrders('fulfillmentStatus', []);
+  }, [filterOrders]);
 
   const handleHeadingChange = useCallback((newChange) => {
     if (newChange) {

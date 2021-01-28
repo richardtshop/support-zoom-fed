@@ -74,7 +74,7 @@ export const orders = [
     paymentStatus: 'voided',
     fulfillmentStatus: 'fulfilled',
     total: 42343,
-    status: 'cancelled',
+    status: 'canceled',
   },
   {
     id: 8,
