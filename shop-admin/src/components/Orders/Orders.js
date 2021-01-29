@@ -1,16 +1,20 @@
+/* eslint-disable no-console */
 // To Do
 //
-// Text
-// Sorting
-// Tabs
-// Currency conversion
-// Shift + select multiple orders
-// Capitalize labels
-// Refactor similar code for filters
+// [ ] Text query
+// [x] Sorting UI
+// [ ] Sorting logic
+// [ ] Tabs
+// [x] Currency conversion
+// [ ] Shift + select multiple orders
+// [x] Capitalize labels
+// [ ] Refactor similar code for filters
+// [x] App title/tab title
+// [ ] Organise
+// [x] Move sort popover out into it's own code within componenent (possible map with a set of data values)
 
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import {
-  Button,
   Filters,
   ChoiceList,
   Page,
@@ -22,10 +26,13 @@ import {
   Card,
   Layout,
   Checkbox,
+  Button,
+  Popover,
+  RadioButton,
 } from '@shopify/polaris';
-import {ExportMinor} from '@shopify/polaris-icons';
+import {ExportMinor, SortMinor} from '@shopify/polaris-icons';
 
-import {capitalize} from '../../helpers/helpers';
+import {capitalize, convertCents} from '../../helpers/helpers';
 
 import {orders} from './data/orders';
 
@@ -35,6 +42,9 @@ export default function Orders() {
   const [orderStatusFilter, setOrderStatusFilter] = useState(null);
   const [paymentStatusFilter, setPaymentStatusFilter] = useState(null);
   const [fulfillmentStatusFilter, setFulfillmentStatusFilter] = useState(null);
+  const [sortValue, setSortValue] = useState('orderNumberAscending');
+  const [sortPopoverActive, setSortPopoverActive] = useState(false);
+  const [queryValue, setQueryValue] = useState(null);
 
   const defaultActiveFilters = {
     status: [],
@@ -44,7 +54,14 @@ export default function Orders() {
 
   const [activeFilters, setActiveFilters] = useState(defaultActiveFilters);
 
-  const [queryValue, setQueryValue] = useState(null);
+  useEffect(() => {
+    document.title = `Shop admin | Orders`;
+  });
+
+  const toggleSortPopoverActive = useCallback(
+    () => setSortPopoverActive((popoverActive) => !popoverActive),
+    [],
+  );
 
   const filterOrders = useCallback(
     (filterKey, filterArray) => {
@@ -113,6 +130,11 @@ export default function Orders() {
     }
   }, []);
 
+  const handleSortChange = useCallback(
+    (_checked, newValue) => setSortValue(newValue),
+    [],
+  );
+
   const filters = [
     {
       key: 'orderStatusFilter',
@@ -180,6 +202,57 @@ export default function Orders() {
 
   const appliedFilters = [];
 
+  const popOverContent = [
+    {
+      label: 'Order number (ascending)',
+      id: 'orderNumberAscending',
+    },
+    {
+      label: 'Order number (descending)',
+      id: 'orderNumberDescending',
+    },
+    {
+      label: 'Date (oldest first)',
+      id: 'dateOldestFirst',
+    },
+    {
+      label: 'Date (newest first)',
+      id: 'dateNewestFirst',
+    },
+    {
+      label: 'Customer name (A-Z)',
+      id: 'customerNameAZ',
+    },
+    {
+      label: 'Customer name (Z-A)',
+      id: 'customerNameZA',
+    },
+    {
+      label: 'Payment status (A-Z)',
+      id: 'paymentStatusAZ',
+    },
+    {
+      label: 'Payment status (Z-A)',
+      id: 'paymentStatusZA',
+    },
+    {
+      label: 'Fulfillment status (A-Z)',
+      id: 'fulfillmentStatusAZ',
+    },
+    {
+      label: 'Fulfillment status (Z-A)',
+      id: 'fulfillmentStatusZA',
+    },
+    {
+      label: 'Total price (low to high)',
+      id: 'totalPriceLowHigh',
+    },
+    {
+      label: 'Total price (high to low)',
+      id: 'totalPriceHighLow',
+    },
+  ];
+
   if (!isEmpty(orderStatusFilter)) {
     const key = 'orderStatus';
     appliedFilters.push({
@@ -207,18 +280,49 @@ export default function Orders() {
     });
   }
 
+  const sortActivator = (
+    <Button onClick={toggleSortPopoverActive} icon={SortMinor}>
+      Sort
+    </Button>
+  );
+
   const filterControl = (
     <>
-      <Filters
-        queryValue={queryValue}
-        filters={filters}
-        appliedFilters={appliedFilters}
-        onQueryChange={setQueryValue}
-      >
-        <div style={{paddingLeft: '8px'}}>
-          <Button>Save</Button>
+      <Stack>
+        <Stack.Item fill>
+          <Filters
+            queryValue={queryValue}
+            filters={filters}
+            appliedFilters={appliedFilters}
+            onQueryChange={setQueryValue}
+          />
+        </Stack.Item>
+        <div>
+          <Popover
+            active={sortPopoverActive}
+            activator={sortActivator}
+            onClose={toggleSortPopoverActive}
+          >
+            <Card>
+              <Card.Section>
+                <Stack vertical spacing="extraTight">
+                  <TextStyle variation="subdued">Sort by</TextStyle>
+                  {popOverContent.map((option) => (
+                    <RadioButton
+                      key={`sortOption-${option.id}`}
+                      label={option.label}
+                      checked={sortValue === option.id}
+                      id={option.id}
+                      name="sortOrders"
+                      onChange={handleSortChange}
+                    />
+                  ))}
+                </Stack>
+              </Card.Section>
+            </Card>
+          </Popover>
         </div>
-      </Filters>
+      </Stack>
       {selectedItems.length === 0 && (
         <div style={{padding: '1.2rem 2rem 0 0.8rem'}}>
           <Stack distribution="equalSpacing" alignment="center">
@@ -250,13 +354,20 @@ export default function Orders() {
   );
 
   function disambiguateLabel(key, value) {
+    console.log(value);
     switch (key) {
       case 'orderStatus':
-        return `Order status: ${value}`;
+        return `Order status: ${value
+          .map((val) => `${capitalize(val)}`)
+          .join(', ')}`;
       case 'paymentStatus':
-        return `Payment status: ${value.map((val) => `${val}`).join(', ')}`;
+        return `Payment status: ${value
+          .map((val) => `${capitalize(val)}`)
+          .join(', ')}`;
       case 'fulfillmentStatus':
-        return `Fulfillment status: ${value.map((val) => `${val}`).join(', ')}`;
+        return `Fulfillment status: ${value
+          .map((val) => `${capitalize(val)}`)
+          .join(', ')}`;
 
       default:
         return value;
@@ -293,6 +404,50 @@ export default function Orders() {
     return ['incomplete', 'attention'];
   }
 
+  function renderItem(item) {
+    const {
+      id,
+      url,
+      orderNumber,
+      date,
+      customer,
+      paymentStatus,
+      fulfillmentStatus,
+      total,
+    } = item;
+
+    const paymentProgress = paymentCompletion(paymentStatus);
+    const fulfillmentProgress = fullfilmentCompletion(fulfillmentStatus);
+    return (
+      <ResourceItem
+        id={id}
+        url={url}
+        accessibilityLabel={`View details for ${orderNumber}`}
+        name={orderNumber}
+      >
+        <Stack distribution="fillEvenly" wrap={false}>
+          <TextStyle variation="strong">{`#${orderNumber}`}</TextStyle>
+          <TextStyle>{date}</TextStyle>
+          <TextStyle>{customer}</TextStyle>
+          <Badge progress={paymentProgress[0]} status={paymentProgress[1]}>
+            {capitalize(paymentStatus)}
+          </Badge>
+          <Badge
+            progress={fulfillmentProgress[0]}
+            status={fulfillmentProgress[1]}
+          >
+            {capitalize(fulfillmentStatus)}
+          </Badge>
+          <Stack.Item>
+            <div style={{textAlign: 'right'}}>
+              <TextStyle>{convertCents(total)}</TextStyle>
+            </div>
+          </Stack.Item>
+        </Stack>
+      </ResourceItem>
+    );
+  }
+
   return (
     <Page
       fullWidth
@@ -323,54 +478,7 @@ export default function Orders() {
               selectable
               showHeader={selectedItems.length > 0}
               filterControl={filterControl}
-              renderItem={(item) => {
-                const {
-                  id,
-                  url,
-                  orderNumber,
-                  date,
-                  customer,
-                  paymentStatus,
-                  fulfillmentStatus,
-                  total,
-                } = item;
-
-                const paymentProgress = paymentCompletion(paymentStatus);
-                const fulfillmentProgress = fullfilmentCompletion(
-                  fulfillmentStatus,
-                );
-                return (
-                  <ResourceItem
-                    id={id}
-                    url={url}
-                    accessibilityLabel={`View details for ${orderNumber}`}
-                    name={orderNumber}
-                  >
-                    <Stack distribution="fillEvenly" wrap={false}>
-                      <TextStyle variation="strong">{`#${orderNumber}`}</TextStyle>
-                      <TextStyle>{date}</TextStyle>
-                      <TextStyle>{customer}</TextStyle>
-                      <Badge
-                        progress={paymentProgress[0]}
-                        status={paymentProgress[1]}
-                      >
-                        {capitalize(paymentStatus)}
-                      </Badge>
-                      <Badge
-                        progress={fulfillmentProgress[0]}
-                        status={fulfillmentProgress[1]}
-                      >
-                        {capitalize(fulfillmentStatus)}
-                      </Badge>
-                      <Stack.Item>
-                        <div style={{textAlign: 'right'}}>
-                          <TextStyle>{total}</TextStyle>
-                        </div>
-                      </Stack.Item>
-                    </Stack>
-                  </ResourceItem>
-                );
-              }}
+              renderItem={renderItem}
             />
           </Card>
         </Layout.Section>

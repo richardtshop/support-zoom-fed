@@ -3,7 +3,7 @@
 
 // TO DO - Import custom styles module for divs etc if needed
 
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import {
   ActionList,
   Badge,
@@ -32,6 +32,10 @@ import {
 function Home() {
   const [covidPopoverActive, setCovidPopoverActive] = useState(false);
   const [domainPopoverActive, setDomainPopoverActive] = useState(false);
+
+  useEffect(() => {
+    document.title = `Shop admin | Home`;
+  });
 
   const toggleCovidPopoverActive = useCallback(
     () => setCovidPopoverActive((popoverActiveState) => !popoverActiveState),
