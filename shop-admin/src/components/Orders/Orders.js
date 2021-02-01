@@ -12,6 +12,8 @@
 // [ ] Organise
 // [ ] Refactor similar code for filters
 // [ ] Clear button for filters
+// [x] Mobile nav
+// Horizontal scroll
 
 import React, {useState, useCallback, useEffect} from 'react';
 import {
@@ -34,6 +36,7 @@ import {ExportMinor, SortMinor} from '@shopify/polaris-icons';
 
 import {capitalize, convertCents} from '../../helpers/helpers';
 
+import * as styles from './styles.module.scss';
 import {orders} from './data/orders';
 
 export default function Orders() {
@@ -367,7 +370,7 @@ export default function Orders() {
             onQueryChange={setQueryValue}
           />
         </Stack.Item>
-        <div>
+        <>
           <Popover
             active={sortPopoverActive}
             activator={sortActivator}
@@ -391,7 +394,7 @@ export default function Orders() {
               </Card.Section>
             </Card>
           </Popover>
-        </div>
+        </>
       </Stack>
       {selectedItems.length === 0 && (
         <div style={{padding: '1.2rem 2rem 0 0.8rem'}}>
@@ -539,16 +542,19 @@ export default function Orders() {
       <Layout>
         <Layout.Section>
           <Card>
-            <ResourceList
-              resourceName={{singular: 'order', plural: 'orders'}}
-              items={displayedOrders}
-              selectedItems={selectedItems}
-              onSelectionChange={setSelectedItems}
-              selectable
-              showHeader={selectedItems.length > 0}
-              filterControl={filterControl}
-              renderItem={renderItem}
-            />
+            <div className={styles.tableWrapper}>
+              <ResourceList
+                className={styles.tableWrapper}
+                resourceName={{singular: 'order', plural: 'orders'}}
+                items={displayedOrders}
+                selectedItems={selectedItems}
+                onSelectionChange={setSelectedItems}
+                selectable
+                showHeader={selectedItems.length > 0}
+                filterControl={filterControl}
+                renderItem={renderItem}
+              />
+            </div>
           </Card>
         </Layout.Section>
       </Layout>
