@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 // To Do
 //
 // [ ] Text query
@@ -12,6 +11,7 @@
 // [x] Move sort popover out into it's own code within componenent (possible map with a set of data values)
 // [ ] Organise
 // [ ] Refactor similar code for filters
+// [ ] Clear button for filters
 
 import React, {useState, useCallback, useEffect} from 'react';
 import {
@@ -37,8 +37,6 @@ import {capitalize, convertCents} from '../../helpers/helpers';
 import {orders} from './data/orders';
 
 export default function Orders() {
-  console.log('');
-
   const [displayedOrders, setDisplayedOrders] = useState(orders);
   const [selectedItems, setSelectedItems] = useState([]);
   const [orderStatusFilter, setOrderStatusFilter] = useState(null);
@@ -221,6 +219,7 @@ export default function Orders() {
           onChange={handleOrderStatusChange}
         />
       ),
+      hideClearButton: true,
       shortcut: true,
     },
     {
@@ -245,6 +244,7 @@ export default function Orders() {
           allowMultiple
         />
       ),
+      hideClearButton: true,
       shortcut: true,
     },
     {
@@ -265,6 +265,7 @@ export default function Orders() {
           allowMultiple
         />
       ),
+      hideClearButton: true,
       shortcut: true,
     },
   ];
@@ -423,7 +424,6 @@ export default function Orders() {
   );
 
   function disambiguateLabel(key, value) {
-    console.log(value);
     switch (key) {
       case 'orderStatus':
         return `Order status: ${value
