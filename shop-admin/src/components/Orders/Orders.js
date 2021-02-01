@@ -3,15 +3,15 @@
 //
 // [ ] Text query
 // [x] Sorting UI
-// [ ] Sorting logic
+// [x] Sorting logic
 // [ ] Tabs
 // [x] Currency conversion
 // [ ] Shift + select multiple orders
 // [x] Capitalize labels
-// [ ] Refactor similar code for filters
 // [x] App title/tab title
-// [ ] Organise
 // [x] Move sort popover out into it's own code within componenent (possible map with a set of data values)
+// [ ] Organise
+// [ ] Refactor similar code for filters
 
 import React, {useState, useCallback, useEffect} from 'react';
 import {
@@ -37,6 +37,8 @@ import {capitalize, convertCents} from '../../helpers/helpers';
 import {orders} from './data/orders';
 
 export default function Orders() {
+  console.log('');
+
   const [displayedOrders, setDisplayedOrders] = useState(orders);
   const [selectedItems, setSelectedItems] = useState([]);
   const [orderStatusFilter, setOrderStatusFilter] = useState(null);
@@ -130,9 +132,76 @@ export default function Orders() {
     }
   }, []);
 
+  const sortOrders = (key) => {
+    const sortKeys = {
+      orderNumberAscending: ['id', 'ascending'],
+      orderNumberDescending: ['id', 'descending'],
+      dateOldestFirst: ['date', 'ascending'],
+      dateNewestFirst: ['date', 'descending'],
+      customerNameAZ: ['customer', 'ascending'],
+      customerNameZA: ['customer', 'descending'],
+      paymentStatusAZ: ['paymentStatus', 'ascending'],
+      paymentStatusZA: ['paymentStatus', 'descending'],
+      fulfillmentStatusAZ: ['fulfillmentStatus', 'ascending'],
+      fulfillmentStatusZA: ['fulfillmentStatus', 'descending'],
+      totalPriceLowHigh: ['total', 'ascending'],
+      totalPriceHighLow: ['total', 'descending'],
+    };
+
+    return sortKeys[key];
+  };
+
+  const getCustomerSortName = (customer) => {
+    const customerArray = customer.split(' ');
+    return customerArray[customerArray.length - 1];
+  };
+
   const handleSortChange = useCallback(
-    (_checked, newValue) => setSortValue(newValue),
-    [],
+    (_checked, newValue) => {
+      // implement sorting logic
+      // 1. Have it always sorted by a specific intial value (order number) and this will update it
+      // 2. Only sort at this point (don't sort first)
+
+      const [key, order] = sortOrders(newValue);
+
+      const sortedOrders = displayedOrders.sort((currentOrder, nextOrder) => {
+        let current = currentOrder[key];
+        let next = nextOrder[key];
+
+        // sort my customer surname (or single name if only one name)
+        if (key === 'customer') {
+          current = getCustomerSortName(current);
+          next = getCustomerSortName(next);
+        }
+
+        // sort date by date format
+        if (key === 'date') {
+          current = Date.parse(current);
+          next = Date.parse(next);
+        }
+
+        if (order === 'descending') {
+          if (next < current) {
+            return -1;
+          }
+          if (current > next) {
+            return 1;
+          }
+          return 0;
+        } else {
+          if (current < next) {
+            return -1;
+          }
+          if (next > current) {
+            return 1;
+          }
+          return 0;
+        }
+      });
+      setDisplayedOrders(sortedOrders);
+      setSortValue(newValue);
+    },
+    [displayedOrders],
   );
 
   const filters = [
