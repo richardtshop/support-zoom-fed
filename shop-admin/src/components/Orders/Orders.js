@@ -1,20 +1,3 @@
-// To Do
-//
-// [ ] Text query
-// [x] Sorting UI
-// [x] Sorting logic
-// [ ] Tabs
-// [x] Currency conversion
-// [ ] Shift + select multiple orders
-// [x] Capitalize labels
-// [x] App title/tab title
-// [x] Move sort popover out into it's own code within componenent (possible map with a set of data values)
-// [ ] Organise
-// [ ] Refactor similar code for filters
-// [ ] Clear button for filters
-// [x] Mobile nav
-// Horizontal scroll
-
 import React, {useState, useCallback, useEffect} from 'react';
 import {
   Filters,
@@ -36,7 +19,6 @@ import {ExportMinor, SortMinor} from '@shopify/polaris-icons';
 
 import {capitalize, convertCents} from '../../helpers/helpers';
 
-import * as styles from './styles.module.scss';
 import {orders} from './data/orders';
 
 export default function Orders() {
@@ -88,43 +70,21 @@ export default function Orders() {
     [activeFilters],
   );
 
-  const handleOrderStatusChange = useCallback(
-    (value) => {
-      setOrderStatusFilter(value);
-      filterOrders('status', value);
+  const handleStatusChange = useCallback(
+    (value, key, updater) => {
+      updater(value);
+      filterOrders(key, value);
     },
     [filterOrders],
   );
 
-  const handleOrderStatusRemove = useCallback(() => {
-    setOrderStatusFilter(null);
-    filterOrders('status', []);
-  }, [filterOrders]);
-
-  const handlePaymentStatusChange = useCallback(
-    (value) => {
-      setPaymentStatusFilter(value);
-      filterOrders('paymentStatus', value);
+  const handleStatusRemove = useCallback(
+    (key, updater) => {
+      updater(null);
+      filterOrders(key, []);
     },
     [filterOrders],
   );
-  const handlePaymentStatusRemove = useCallback(() => {
-    setPaymentStatusFilter(null);
-    filterOrders('paymentStatus', []);
-  }, [filterOrders]);
-
-  const handleFulfillmentStatusChange = useCallback(
-    (value) => {
-      setFulfillmentStatusFilter(value);
-      filterOrders('fulfillmentStatus', value);
-    },
-    [filterOrders],
-  );
-  const handleFulfillmentStatusRemove = useCallback(() => {
-    setFulfillmentStatusFilter(null);
-    filterOrders('fulfillmentStatus', []);
-  }, [filterOrders]);
-
   const handleHeadingChange = useCallback((newChange) => {
     if (newChange) {
       setSelectedItems('All');
@@ -159,10 +119,6 @@ export default function Orders() {
 
   const handleSortChange = useCallback(
     (_checked, newValue) => {
-      // implement sorting logic
-      // 1. Have it always sorted by a specific intial value (order number) and this will update it
-      // 2. Only sort at this point (don't sort first)
-
       const [key, order] = sortOrders(newValue);
 
       const sortedOrders = displayedOrders.sort((currentOrder, nextOrder) => {
@@ -219,7 +175,9 @@ export default function Orders() {
             {label: 'Canceled', value: 'canceled'},
           ]}
           selected={orderStatusFilter || []}
-          onChange={handleOrderStatusChange}
+          onChange={(value) =>
+            handleStatusChange(value, 'status', setOrderStatusFilter)
+          }
         />
       ),
       hideClearButton: true,
@@ -243,7 +201,9 @@ export default function Orders() {
             {label: 'Voided', value: 'voided'},
           ]}
           selected={paymentStatusFilter || []}
-          onChange={handlePaymentStatusChange}
+          onChange={(value) =>
+            handleStatusChange(value, 'paymentStatus', setPaymentStatusFilter)
+          }
           allowMultiple
         />
       ),
@@ -264,7 +224,13 @@ export default function Orders() {
             {label: 'Scheduled', value: 'scheduled'},
           ]}
           selected={fulfillmentStatusFilter || []}
-          onChange={handleFulfillmentStatusChange}
+          onChange={(value) =>
+            handleStatusChange(
+              value,
+              'fulfillmentStatus',
+              setFulfillmentStatusFilter,
+            )
+          }
           allowMultiple
         />
       ),
@@ -331,7 +297,7 @@ export default function Orders() {
     appliedFilters.push({
       key,
       label: disambiguateLabel(key, orderStatusFilter),
-      onRemove: handleOrderStatusRemove,
+      onRemove: () => handleStatusRemove('status', setOrderStatusFilter),
     });
   }
 
@@ -340,7 +306,8 @@ export default function Orders() {
     appliedFilters.push({
       key,
       label: disambiguateLabel(key, paymentStatusFilter),
-      onRemove: handlePaymentStatusRemove,
+      onRemove: () =>
+        handleStatusRemove('paymentStatus', setPaymentStatusFilter),
     });
   }
 
@@ -349,7 +316,8 @@ export default function Orders() {
     appliedFilters.push({
       key,
       label: disambiguateLabel(key, fulfillmentStatusFilter),
-      onRemove: handleFulfillmentStatusRemove,
+      onRemove: () =>
+        handleStatusRemove('fulfillmentStatus', setFulfillmentStatusFilter),
     });
   }
 
@@ -440,7 +408,6 @@ export default function Orders() {
         return `Fulfillment status: ${value
           .map((val) => `${capitalize(val)}`)
           .join(', ')}`;
-
       default:
         return value;
     }
@@ -449,9 +416,8 @@ export default function Orders() {
   function isEmpty(value) {
     if (Array.isArray(value)) {
       return value.length === 0;
-    } else {
-      return value === '' || value == null;
     }
+    return value === '' || value == null;
   }
 
   function paymentCompletion(status) {
@@ -542,19 +508,16 @@ export default function Orders() {
       <Layout>
         <Layout.Section>
           <Card>
-            <div className={styles.tableWrapper}>
-              <ResourceList
-                className={styles.tableWrapper}
-                resourceName={{singular: 'order', plural: 'orders'}}
-                items={displayedOrders}
-                selectedItems={selectedItems}
-                onSelectionChange={setSelectedItems}
-                selectable
-                showHeader={selectedItems.length > 0}
-                filterControl={filterControl}
-                renderItem={renderItem}
-              />
-            </div>
+            <ResourceList
+              resourceName={{singular: 'order', plural: 'orders'}}
+              items={displayedOrders}
+              selectedItems={selectedItems}
+              onSelectionChange={setSelectedItems}
+              selectable
+              showHeader={selectedItems.length > 0}
+              filterControl={filterControl}
+              renderItem={renderItem}
+            />
           </Card>
         </Layout.Section>
       </Layout>
